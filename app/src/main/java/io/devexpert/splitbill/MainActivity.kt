@@ -25,7 +25,6 @@ class MainActivity : ComponentActivity() {
                             onTicketProcessed = { ticketData ->
                                 // Guardar los datos en el singleton
                                 TicketDataHolder.setTicketData(ticketData)
-                                // Navegar a la pantalla de detalle
                                 navController.navigate("receipt")
                             }
                         )

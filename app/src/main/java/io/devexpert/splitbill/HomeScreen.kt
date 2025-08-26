@@ -31,11 +31,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import androidx.core.graphics.scale
 import kotlinx.coroutines.launch
 import java.io.File
-import io.devexpert.splitbill.BuildConfig
 
-// El Composable principal de la pantalla de inicio
+
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -71,7 +71,7 @@ fun HomeScreen(
         val aspectRatio = bitmap.height.toFloat() / bitmap.width
         val newWidth = maxWidth
         val newHeight = (maxWidth * aspectRatio).toInt()
-        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+        return bitmap.scale(newWidth, newHeight)
     }
 
     // Launcher para capturar foto con la cámara (alta resolución)
@@ -115,7 +115,7 @@ fun HomeScreen(
     Scaffold { padding ->
         Box(
             modifier = modifier
-                .padding(padding)
+                .padding(paddingValues = padding)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
@@ -123,16 +123,14 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Contador de escaneos
                 Text(
                     text = if (scansLeft > 0)
-                        stringResource(R.string.scans_remaining, scansLeft)
+                        stringResource(id = R.string.scans_remaining, scansLeft)
                     else
-                        stringResource(R.string.no_scans_remaining),
+                        stringResource(id = R.string.no_scans_remaining),
                     fontSize = 18.sp,
                     modifier = Modifier.padding(bottom = 32.dp)
                 )
-                // Botón principal
                 Button(
                     onClick = {
                         if (isButtonEnabled && !isProcessing) {
@@ -153,14 +151,13 @@ fun HomeScreen(
                 ) {
                     Text(
                         text = if (isProcessing)
-                            stringResource(R.string.processing)
+                            stringResource(id = R.string.processing)
                         else
-                            stringResource(R.string.scan_ticket),
+                            stringResource(id = R.string.scan_ticket),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
-
                 // Mostrar resultado del procesamiento
                 when {
                     isProcessing -> {
