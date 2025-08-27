@@ -13,41 +13,44 @@ import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-// Extension para crear el DataStore
+// Extension function to DataStore
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "scan_counter")
 
 class ScanCounter(private val context: Context) {
-    
     companion object {
         private val FIRST_USE_DATE_KEY = longPreferencesKey("first_use_date")
         private val SCANS_REMAINING_KEY = intPreferencesKey("scans_remaining")
-        private const val MAX_SCANS_PER_MONTH = 5
+        private const val MAX_SCANS_PER_MONTH = 50
     }
-    
-    // Flow que emite el número de escaneos restantes
+
+    // this flow emits the number of scans remaining
     val scansRemaining: Flow<Int> = context.dataStore.data.map { preferences ->
         preferences[SCANS_REMAINING_KEY] ?: MAX_SCANS_PER_MONTH
     }
-    
-    // Inicializar el contador al abrir la app
+
+    // Initialize or reset if a month has passed
     suspend fun initializeOrResetIfNeeded() {
+
+        // first() is used for get the first value the synchronously and close the flow
+        // we don't want to be listening changes all the time
         val preferences = context.dataStore.data.first()
         val firstUseDate = preferences[FIRST_USE_DATE_KEY]
+        // current date in epoch days
         val currentDateEpoch = LocalDate.now().toEpochDay()
-        
+
         if (firstUseDate == null) {
-            // Primera vez usando la app
+            // Using App for the first time
             context.dataStore.edit { preferences ->
                 preferences[FIRST_USE_DATE_KEY] = currentDateEpoch
                 preferences[SCANS_REMAINING_KEY] = MAX_SCANS_PER_MONTH
             }
         } else {
-            // Verificar si ha pasado un mes
+            // Verify if a month has passed
             val firstUse = LocalDate.ofEpochDay(firstUseDate)
             val monthsElapsed = ChronoUnit.MONTHS.between(firstUse, LocalDate.now())
-            
+
             if (monthsElapsed >= 1) {
-                // Ha pasado al menos un mes, resetear
+                // one month or more has passed, reset
                 context.dataStore.edit { preferences ->
                     preferences[FIRST_USE_DATE_KEY] = currentDateEpoch
                     preferences[SCANS_REMAINING_KEY] = MAX_SCANS_PER_MONTH
@@ -55,8 +58,8 @@ class ScanCounter(private val context: Context) {
             }
         }
     }
-    
-    // Decrementar el contador de escaneos
+
+    // Decrement counter of scans
     suspend fun decrementScan() {
         context.dataStore.edit { preferences ->
             val current = preferences[SCANS_REMAINING_KEY] ?: MAX_SCANS_PER_MONTH
@@ -65,8 +68,8 @@ class ScanCounter(private val context: Context) {
             }
         }
     }
-    
-    // Obtener el número actual de escaneos (para uso inmediato)
+
+    // gets the current number of scans remaining (for immediate use)
     suspend fun getCurrentScans(): Int {
         return context.dataStore.data.first()[SCANS_REMAINING_KEY] ?: MAX_SCANS_PER_MONTH
     }

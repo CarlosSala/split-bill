@@ -41,13 +41,13 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onTicketProcessed: (TicketData) -> Unit
 ) {
-    // Variable local para los escaneos restantes (ahora desde DataStore)
+
     val context = LocalContext.current
-    val scanCounter = remember { ScanCounter(context) }
+    val scanCounter = remember { ScanCounter(context = context) }
     val scansLeft by scanCounter.scansRemaining.collectAsState(initial = 5)
     val isButtonEnabled = scansLeft > 0
 
-    // Inicializar o resetear si es necesario al cargar la pantalla
+    // Initialize or reset if needed when loading the screen
     LaunchedEffect(Unit) {
         scanCounter.initializeOrResetIfNeeded()
     }
@@ -60,7 +60,7 @@ fun HomeScreen(
     var isProcessing by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    // Coroutine scope para operaciones asíncronas
+    // coroutine scope for async operations
     val coroutineScope = rememberCoroutineScope()
     val ticketProcessor = remember { TicketProcessor(useMockData = BuildConfig.DEBUG) }
 
@@ -74,7 +74,7 @@ fun HomeScreen(
         return bitmap.scale(newWidth, newHeight)
     }
 
-    // Launcher para capturar foto con la cámara (alta resolución)
+    // launcher to take a picture with the camera (high resolution)
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success: Boolean ->
@@ -82,20 +82,20 @@ fun HomeScreen(
             val inputStream = context.contentResolver.openInputStream(photoUri!!)
             val bitmap = inputStream?.use { BitmapFactory.decodeStream(it) }
             if (bitmap != null) {
-                // Redimensionar antes de procesar
+                // resize before processing
                 val resizedBitmap = resizeBitmapToMaxWidth(bitmap, 1280)
                 capturedPhoto = resizedBitmap
                 isProcessing = true
                 errorMessage = null
-                // Procesar la imagen con IA
+                // Process image with AI in a coroutine
                 coroutineScope.launch {
-                    ticketProcessor.processTicketImage(resizedBitmap)
+                    ticketProcessor.processTicketImage(bitmap = resizedBitmap)
                         .onSuccess { ticketData ->
                             processingResult = ticketData
-                            // Decrementar el contador solo si el procesamiento fue exitoso
+                            // decrement only the processing was successful
                             scanCounter.decrementScan()
                             isProcessing = false
-                            // Llamar al callback para navegar a la siguiente pantalla
+                            // call the callback to navigate to the next screen
                             onTicketProcessed(ticketData)
                         }
                         .onFailure { error ->
@@ -134,7 +134,7 @@ fun HomeScreen(
                 Button(
                     onClick = {
                         if (isButtonEnabled && !isProcessing) {
-                            // Crear archivo temporal para la foto
+                            // create a temporary file for the photo
                             val photoFile = File.createTempFile("ticket_", ".jpg", context.cacheDir)
                             val uri = FileProvider.getUriForFile(
                                 context,
@@ -158,7 +158,7 @@ fun HomeScreen(
                         fontWeight = FontWeight.Bold
                     )
                 }
-                // Mostrar resultado del procesamiento
+                // show result of the processing
                 when {
                     isProcessing -> {
                         Text(

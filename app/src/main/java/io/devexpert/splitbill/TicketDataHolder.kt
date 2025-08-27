@@ -1,7 +1,7 @@
 package io.devexpert.splitbill
 
 /**
- * Singleton para compartir datos del ticket entre pantallas
+ * Singleton to share ticket data between screens
  */
 object TicketDataHolder {
     private var _ticketData: TicketData? = null
