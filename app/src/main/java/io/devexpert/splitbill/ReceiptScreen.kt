@@ -17,13 +17,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import data.TicketRepository
+import domain.TicketItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiptScreen(
+    ticketRepository: TicketRepository,
     onBackPressed: () -> Unit
 ) {
-    val ticketData = remember { TicketDataHolder.getTicketData() }
+    val ticketData = remember { ticketRepository.getTicketData() }
 
     if (ticketData == null) {
         // if there is no ticket data, show error and back button

@@ -32,12 +32,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.core.graphics.scale
+import data.TicketRepository
+import domain.TicketData
 import kotlinx.coroutines.launch
 import java.io.File
 
 
 @Composable
 fun HomeScreen(
+    ticketRepository: TicketRepository,
     modifier: Modifier = Modifier,
     onTicketProcessed: (TicketData) -> Unit
 ) {
@@ -89,28 +92,28 @@ fun HomeScreen(
                 errorMessage = null
                 // Process image with AI in a coroutine
                 coroutineScope.launch {
-                    ticketProcessor.processTicketImage(bitmap = resizedBitmap)
-                        .onSuccess { ticketData ->
-                            processingResult = ticketData
-                            // decrement only the processing was successful
-                            scanCounter.decrementScan()
-                            isProcessing = false
-                            // call the callback to navigate to the next screen
-                            onTicketProcessed(ticketData)
-                        }
-                        .onFailure { error ->
-                            errorMessage = context.getString(
-                                R.string.error_processing_ticket,
-                                error.message ?: ""
-                            )
-                            isProcessing = false
-                        }
+                    try {
+                        val ticketData = ticketRepository.processTicket(resizedBitmap)
+                        // decrement only the processing was successful
+                        scanCounter.decrementScan()
+                        isProcessing = false
+                        // call the callback to navigate to the next screen
+                        onTicketProcessed(ticketData)
+                    } catch (error: Exception) {
+
+                        errorMessage = context.getString(
+                            R.string.error_processing_ticket,
+                            error.message ?: ""
+                        )
+                        isProcessing = false
+                    }
                 }
-            } else {
-                errorMessage = context.getString(R.string.could_not_read_image)
             }
+        } else {
+            errorMessage = context.getString(R.string.could_not_read_image)
         }
     }
+
 
     Scaffold { padding ->
         Box(
