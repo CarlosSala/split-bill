@@ -1,4 +1,4 @@
-package data
+package io.devexpert.splitbill.data.datasource
 
 import kotlinx.coroutines.flow.Flow
 

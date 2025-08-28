@@ -1,7 +1,7 @@
-package domain.usecases
+package io.devexpert.splitbill.usecases
 
-import data.TicketRepository
-import data.TicketData
+import io.devexpert.splitbill.data.repository.TicketRepository
+import io.devexpert.splitbill.data.model.TicketData
 
 class GetTicketDataUseCase(private val ticketRepository: TicketRepository) {
 

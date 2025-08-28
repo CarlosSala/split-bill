@@ -1,4 +1,7 @@
-package data
+package io.devexpert.splitbill.data.repository
+
+import io.devexpert.splitbill.data.datasource.TicketDataSource
+import io.devexpert.splitbill.data.model.TicketData
 
 class TicketRepository(private val ticketDataSource: TicketDataSource) {
 

@@ -1,4 +1,4 @@
-package io.devexpert.splitbill
+package io.devexpert.splitbill.framework.detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,9 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.TicketRepository
-import data.TicketItem
-import domain.usecases.GetTicketDataUseCase
+import io.devexpert.splitbill.R
+import io.devexpert.splitbill.data.repository.TicketRepository
+import io.devexpert.splitbill.data.model.TicketItem
+import io.devexpert.splitbill.usecases.GetTicketDataUseCase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package io.devexpert.splitbill.ui.theme
+package io.devexpert.splitbill.framework.theme
 
 import androidx.compose.ui.graphics.Color
 

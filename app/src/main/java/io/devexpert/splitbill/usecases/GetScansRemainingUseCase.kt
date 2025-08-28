@@ -1,6 +1,6 @@
-package domain.usecases
+package io.devexpert.splitbill.usecases
 
-import data.ScanCounterRepository
+import io.devexpert.splitbill.data.repository.ScanCounterRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetScansRemainingUseCase(private val scanCounterRepository: ScanCounterRepository) {

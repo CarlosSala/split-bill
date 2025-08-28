@@ -1,21 +1,12 @@
-package io.devexpert.splitbill
+package io.devexpert.splitbill.data.datasource.mock
 
-import android.graphics.Bitmap
 import android.util.Log
-import com.google.firebase.Firebase
-import com.google.firebase.ai.ai
-import com.google.firebase.ai.type.Schema
-import com.google.firebase.ai.type.content
-import com.google.firebase.ai.type.generationConfig
-import data.TicketData
-import kotlinx.coroutines.Dispatchers
+import io.devexpert.splitbill.data.datasource.TicketDataSource
+import io.devexpert.splitbill.data.model.TicketData
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
-
-
-class TicketProcessor(private val useMockData: Boolean = false) {
+class MockTicketDataSource : TicketDataSource {
 
     companion object {
         private val MOCK_JSON: String
@@ -133,70 +124,19 @@ class TicketProcessor(private val useMockData: Boolean = false) {
             """.trimIndent()
     }
 
-    suspend fun processTicketImage(bitmap: Bitmap): Result<TicketData> =
-        withContext(context = Dispatchers.IO) {
-            try {
-                if (useMockData) {
-                    Log.d("TicketProcessor", "Using mock data...")
-                    // Simulate some delay
-                    delay(1500)
-                    // Parse the mock JSON using kotlinx.serialization
-                    val ticketData =
-                        Json { ignoreUnknownKeys = true }.decodeFromString<TicketData>(MOCK_JSON)
-                    Result.success(value = ticketData)
-                } else {
-                    // Real implementation using Firebase Generative AI
-                    Log.d("TicketProcessor", "initialize image processing...")
 
-                    // Define schema for JSON response (without requiredProperties)
-                    val jsonSchema = Schema.obj(
-                        mapOf(
-                            "items" to Schema.array(
-                                Schema.obj(
-                                    mapOf(
-                                        "name" to Schema.string(),
-                                        "count" to Schema.integer(),
-                                        "price_per_unit" to Schema.double()
-                                    )
-                                )
-                            ),
-                            "total" to Schema.double()
-                        )
-                    )
+    override suspend fun processTicket(imageByte: ByteArray): TicketData {
 
-                    val prompt = """
-                    Analiza esta imagen de un ticket de restaurante y extrae:
-                    1. Lista de items con nombre, cantidad y precio individual
-                    2. Total de la cuenta
-                    Si no puedes leer algún precio, ponlo como 0.0
-                """.trimIndent()
+        Log.d("TicketProcessor", "Using mock data...")
+        // Simulate some delay
+        delay(1500)
+        // Parse the mock JSON using kotlinx.serialization
+        return Json {
+            ignoreUnknownKeys = true
+        }.decodeFromString<TicketData>(MOCK_JSON)
 
-                    val inputContent = content {
-                        image(bitmap)
-                        text(prompt)
-                    }
 
-                    val model = Firebase.ai.generativeModel(
-                        modelName = "gemini-2.5-flash-lite-preview-06-17",
-                        generationConfig = generationConfig {
-                            responseMimeType = "application/json"
-                            responseSchema = jsonSchema
-                        }
-                    )
+    }
 
-                    val response = model.generateContent(inputContent)
-                    val responseText =
-                        response.text ?: throw Exception("There is no IA response text")
-                    Log.d("TicketProcessor", "Response of IA: $responseText")
 
-                    // Parse the JSON using kotlinx.serialization
-                    val ticketData =
-                        Json { ignoreUnknownKeys = true }.decodeFromString<TicketData>(responseText)
-                    Result.success(value = ticketData)
-                }
-            } catch (e: Exception) {
-                Log.e("TicketProcessor", "Error processing ticket: ${e.message}", e)
-                Result.failure(e)
-            }
-        }
-} 
+}

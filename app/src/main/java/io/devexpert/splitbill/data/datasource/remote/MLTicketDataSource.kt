@@ -1,4 +1,4 @@
-package data
+package io.devexpert.splitbill.data.datasource.remote
 
 import android.util.Log
 import com.google.firebase.Firebase
@@ -6,7 +6,9 @@ import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.content
 import com.google.firebase.ai.type.generationConfig
-import io.devexpert.splitbill.ImageConverter
+import io.devexpert.splitbill.data.datasource.TicketDataSource
+import io.devexpert.splitbill.data.model.TicketData
+import io.devexpert.splitbill.framework.core.ImageConverter
 import kotlinx.serialization.json.Json
 
 class MLTicketDataSource : TicketDataSource {
@@ -21,18 +23,18 @@ class MLTicketDataSource : TicketDataSource {
         val bitmap = ImageConverter.toBitmap(imageByte)
 
         // Define schema for JSON response (without requiredProperties)
-        val jsonSchema = Schema.obj(
+        val jsonSchema = Schema.Companion.obj(
             mapOf(
-                "items" to Schema.array(
-                    Schema.obj(
+                "items" to Schema.Companion.array(
+                    Schema.Companion.obj(
                         mapOf(
-                            "name" to Schema.string(),
-                            "count" to Schema.integer(),
-                            "price_per_unit" to Schema.double()
+                            "name" to Schema.Companion.string(),
+                            "count" to Schema.Companion.integer(),
+                            "price_per_unit" to Schema.Companion.double()
                         )
                     )
                 ),
-                "total" to Schema.double()
+                "total" to Schema.Companion.double()
             )
         )
 

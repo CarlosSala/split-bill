@@ -1,4 +1,4 @@
-package io.devexpert.splitbill
+package io.devexpert.splitbill.framework.home
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -32,13 +32,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.core.graphics.scale
-import data.ScanCounterRepository
-import data.TicketRepository
-import data.TicketData
-import domain.usecases.DecrementScanCounterUseCase
-import domain.usecases.GetScansRemainingUseCase
-import domain.usecases.InitializeScanCounterUseCase
-import domain.usecases.ProcessTicketUseCase
+import io.devexpert.splitbill.BuildConfig
+import io.devexpert.splitbill.R
+import io.devexpert.splitbill.data.repository.ScanCounterRepository
+import io.devexpert.splitbill.data.repository.TicketRepository
+import io.devexpert.splitbill.data.model.TicketData
+import io.devexpert.splitbill.framework.core.ImageConverter
+import io.devexpert.splitbill.framework.TicketProcessor
+import io.devexpert.splitbill.usecases.DecrementScanCounterUseCase
+import io.devexpert.splitbill.usecases.GetScansRemainingUseCase
+import io.devexpert.splitbill.usecases.InitializeScanCounterUseCase
+import io.devexpert.splitbill.usecases.ProcessTicketUseCase
 import kotlinx.coroutines.launch
 import java.io.File
 

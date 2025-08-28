@@ -1,6 +1,6 @@
-package domain.usecases
+package io.devexpert.splitbill.usecases
 
-import data.TicketRepository
+import io.devexpert.splitbill.data.repository.TicketRepository
 
 class ProcessTicketUseCase(private val ticketRepository: TicketRepository) {
 

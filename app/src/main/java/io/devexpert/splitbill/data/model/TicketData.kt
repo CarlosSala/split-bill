@@ -1,4 +1,4 @@
-package data
+package io.devexpert.splitbill.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
