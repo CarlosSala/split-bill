@@ -7,8 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import data.DataStoreScanCounterDataSource
 import data.MLTicketDataSource
 import data.MockTicketDataSource
+import data.ScanCounterRepository
 import data.TicketRepository
 import io.devexpert.splitbill.ui.theme.SplitBillTheme
 
@@ -20,6 +22,8 @@ class MainActivity : ComponentActivity() {
         val dataSource = if (BuildConfig.DEBUG) MockTicketDataSource() else MLTicketDataSource()
         val ticketRepository = TicketRepository(dataSource)
 
+        val scanCounterDataSource = DataStoreScanCounterDataSource(this)
+        val scanCounterRepository = ScanCounterRepository(scanCounterDataSource)
         setContent {
             SplitBillTheme {
                 val navController = rememberNavController()
@@ -30,11 +34,11 @@ class MainActivity : ComponentActivity() {
                     composable("home") {
                         HomeScreen(
                             ticketRepository = ticketRepository,
-                            onTicketProcessed = { ticketData ->
+                            scanCounterRepository = scanCounterRepository
+                        ) {
 
-                                navController.navigate("receipt")
-                            }
-                        )
+                            navController.navigate("receipt")
+                        }
                     }
 
                     composable("receipt") {

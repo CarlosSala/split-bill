@@ -1,4 +1,4 @@
-package io.devexpert.splitbill
+package data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -16,7 +16,7 @@ import java.time.temporal.ChronoUnit
 // Extension function to DataStore
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "scan_counter")
 
-class ScanCounter(private val context: Context) {
+class DataStoreScanCounterDataSource(private val context: Context) : ScanCounterDataSource {
     companion object {
         private val FIRST_USE_DATE_KEY = longPreferencesKey("first_use_date")
         private val SCANS_REMAINING_KEY = intPreferencesKey("scans_remaining")
@@ -24,12 +24,12 @@ class ScanCounter(private val context: Context) {
     }
 
     // this flow emits the number of scans remaining
-    val scansRemaining: Flow<Int> = context.dataStore.data.map { preferences ->
+    override val scansRemaining: Flow<Int> = context.dataStore.data.map { preferences ->
         preferences[SCANS_REMAINING_KEY] ?: MAX_SCANS_PER_MONTH
     }
 
     // Initialize or reset if a month has passed
-    suspend fun initializeOrResetIfNeeded() {
+    override suspend fun initializeOrResetIfNeeded() {
 
         // first() is used for get the first value the synchronously and close the flow
         // we don't want to be listening changes all the time
@@ -60,7 +60,7 @@ class ScanCounter(private val context: Context) {
     }
 
     // Decrement counter of scans
-    suspend fun decrementScan() {
+    override suspend fun decrementScan() {
         context.dataStore.edit { preferences ->
             val current = preferences[SCANS_REMAINING_KEY] ?: MAX_SCANS_PER_MONTH
             if (current > 0) {
@@ -73,4 +73,4 @@ class ScanCounter(private val context: Context) {
     suspend fun getCurrentScans(): Int {
         return context.dataStore.data.first()[SCANS_REMAINING_KEY] ?: MAX_SCANS_PER_MONTH
     }
-} 
+}

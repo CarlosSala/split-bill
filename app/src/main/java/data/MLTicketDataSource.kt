@@ -1,23 +1,24 @@
 package data
 
-import android.graphics.Bitmap
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.content
 import com.google.firebase.ai.type.generationConfig
-import domain.TicketData
+import io.devexpert.splitbill.ImageConverter
 import kotlinx.serialization.json.Json
 
 class MLTicketDataSource : TicketDataSource {
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    override suspend fun processTicket(image: Bitmap): TicketData {
+    override suspend fun processTicket(imageByte: ByteArray): TicketData {
 
         // Real implementation using Firebase Generative AI
         Log.d("TicketProcessor", "initialize image processing...")
+
+        val bitmap = ImageConverter.toBitmap(imageByte)
 
         // Define schema for JSON response (without requiredProperties)
         val jsonSchema = Schema.obj(
@@ -43,7 +44,7 @@ class MLTicketDataSource : TicketDataSource {
                 """.trimIndent()
 
         val inputContent = content {
-            image(image)
+            image(bitmap)
             text(prompt)
         }
 

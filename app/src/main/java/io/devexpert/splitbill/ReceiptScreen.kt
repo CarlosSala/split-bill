@@ -18,7 +18,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.TicketRepository
-import domain.TicketItem
+import data.TicketItem
+import domain.usecases.GetTicketDataUseCase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +27,10 @@ fun ReceiptScreen(
     ticketRepository: TicketRepository,
     onBackPressed: () -> Unit
 ) {
-    val ticketData = remember { ticketRepository.getTicketData() }
+
+    val getTicketDataUseCase = remember { GetTicketDataUseCase(ticketRepository) }
+
+    val ticketData = remember { getTicketDataUseCase() }
 
     if (ticketData == null) {
         // if there is no ticket data, show error and back button

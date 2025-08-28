@@ -1,8 +1,6 @@
 package data
 
-import android.graphics.Bitmap
 import android.util.Log
-import domain.TicketData
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 
@@ -125,7 +123,7 @@ class MockTicketDataSource : TicketDataSource {
     }
 
 
-    override suspend fun processTicket(image: Bitmap): TicketData {
+    override suspend fun processTicket(imageByte: ByteArray): TicketData {
 
         Log.d("TicketProcessor", "Using mock data...")
         // Simulate some delay

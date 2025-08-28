@@ -32,27 +32,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.core.graphics.scale
+import data.ScanCounterRepository
 import data.TicketRepository
-import domain.TicketData
+import data.TicketData
+import domain.usecases.DecrementScanCounterUseCase
+import domain.usecases.GetScansRemainingUseCase
+import domain.usecases.InitializeScanCounterUseCase
+import domain.usecases.ProcessTicketUseCase
 import kotlinx.coroutines.launch
 import java.io.File
 
 
 @Composable
 fun HomeScreen(
-    ticketRepository: TicketRepository,
     modifier: Modifier = Modifier,
-    onTicketProcessed: (TicketData) -> Unit
+    ticketRepository: TicketRepository,
+    scanCounterRepository: ScanCounterRepository,
+    onTicketProcessed: () -> Unit
 ) {
 
     val context = LocalContext.current
-    val scanCounter = remember { ScanCounter(context = context) }
-    val scansLeft by scanCounter.scansRemaining.collectAsState(initial = 5)
+    val getScansRemainingUseCase = remember { GetScansRemainingUseCase(scanCounterRepository) }
+    val scansLeft by getScansRemainingUseCase().collectAsState(initial = 0)
     val isButtonEnabled = scansLeft > 0
+
+    val initializeScanCounterUseCase =
+        remember { InitializeScanCounterUseCase(scanCounterRepository) }
+    val decrementScanCounterUseCase =
+        remember { DecrementScanCounterUseCase(scanCounterRepository) }
+
 
     // Initialize or reset if needed when loading the screen
     LaunchedEffect(Unit) {
-        scanCounter.initializeOrResetIfNeeded()
+        initializeScanCounterUseCase()
     }
 
     // Estado para almacenar la foto capturada (temporal, solo para pasarla a la IA)
@@ -77,6 +89,9 @@ fun HomeScreen(
         return bitmap.scale(newWidth, newHeight)
     }
 
+    val processTicketUseCase = remember { ProcessTicketUseCase(ticketRepository) }
+
+
     // launcher to take a picture with the camera (high resolution)
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
@@ -93,12 +108,13 @@ fun HomeScreen(
                 // Process image with AI in a coroutine
                 coroutineScope.launch {
                     try {
-                        val ticketData = ticketRepository.processTicket(resizedBitmap)
+                        val imageByte = ImageConverter.toResizedByteArray(bitmap)
+                        processTicketUseCase(imageByte)
                         // decrement only the processing was successful
-                        scanCounter.decrementScan()
+                        decrementScanCounterUseCase()
                         isProcessing = false
                         // call the callback to navigate to the next screen
-                        onTicketProcessed(ticketData)
+                        onTicketProcessed()
                     } catch (error: Exception) {
 
                         errorMessage = context.getString(
