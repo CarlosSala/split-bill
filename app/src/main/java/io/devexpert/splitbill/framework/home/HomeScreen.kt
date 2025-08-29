@@ -16,7 +16,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,23 +57,29 @@ fun HomeScreen(
 
     val context = LocalContext.current
 
-
     val initializeScanCounterUseCase =
         remember { InitializeScanCounterUseCase(scanCounterRepository) }
-    val getScansRemainingUseCase = remember { GetScansRemainingUseCase(scanCounterRepository) }
+    val getScansRemainingUseCase =
+        remember { GetScansRemainingUseCase(scanCounterRepository) }
+    val decrementScanCounterUseCase =
+        remember { DecrementScanCounterUseCase(scanCounterRepository) }
+    val processTicketUseCase =
+        remember { ProcessTicketUseCase(ticketRepository) }
 
     val factory =
-        remember { HomeViewModelFactory(initializeScanCounterUseCase, getScansRemainingUseCase) }
+        remember {
+            HomeViewModelFactory(
+                initializeScanCounterUseCase,
+                getScansRemainingUseCase,
+                decrementScanCounterUseCase,
+                processTicketUseCase
+            )
+        }
     val viewModel: HomeViewModel = viewModel(factory = factory)
 
 
     val scansLeft by viewModel.scansLeft.collectAsState(initial = 0)
     val isButtonEnabled = scansLeft > 0
-
-
-    val decrementScanCounterUseCase =
-        remember { DecrementScanCounterUseCase(scanCounterRepository) }
-    val processTicketUseCase = remember { ProcessTicketUseCase(ticketRepository) }
 
 
     // Initialize or reset if needed when loading the screen
@@ -123,9 +128,9 @@ fun HomeScreen(
                 coroutineScope.launch {
                     try {
                         val imageByte = ImageConverter.toResizedByteArray(bitmap)
-                        processTicketUseCase(imageByte)
+                        viewModel.processTicket(imageByte)
                         // decrement only the processing was successful
-                        decrementScanCounterUseCase()
+                        viewModel.decrementScanCounter()
                         isProcessing = false
                         // call the callback to navigate to the next screen
                         onTicketProcessed()
