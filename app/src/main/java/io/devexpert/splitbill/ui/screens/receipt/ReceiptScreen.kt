@@ -1,4 +1,4 @@
-package io.devexpert.splitbill.framework.detail
+package io.devexpert.splitbill.ui.screens.receipt
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

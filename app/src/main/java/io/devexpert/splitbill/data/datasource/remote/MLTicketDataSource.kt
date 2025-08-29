@@ -8,7 +8,7 @@ import com.google.firebase.ai.type.content
 import com.google.firebase.ai.type.generationConfig
 import io.devexpert.splitbill.data.datasource.TicketDataSource
 import io.devexpert.splitbill.data.model.TicketData
-import io.devexpert.splitbill.framework.core.ImageConverter
+import io.devexpert.splitbill.ui.core.ImageConverter
 import kotlinx.serialization.json.Json
 
 class MLTicketDataSource : TicketDataSource {

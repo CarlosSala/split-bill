@@ -1,4 +1,4 @@
-package io.devexpert.splitbill.framework.core
+package io.devexpert.splitbill.ui.core
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
