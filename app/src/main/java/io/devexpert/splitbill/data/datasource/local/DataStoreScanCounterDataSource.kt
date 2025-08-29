@@ -18,6 +18,7 @@ import java.time.temporal.ChronoUnit
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "scan_counter")
 
 class DataStoreScanCounterDataSource(private val context: Context) : ScanCounterDataSource {
+
     companion object {
         private val FIRST_USE_DATE_KEY = longPreferencesKey("first_use_date")
         private val SCANS_REMAINING_KEY = intPreferencesKey("scans_remaining")

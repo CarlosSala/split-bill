@@ -32,13 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.core.graphics.scale
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.devexpert.splitbill.BuildConfig
 import io.devexpert.splitbill.R
+import io.devexpert.splitbill.data.model.TicketData
 import io.devexpert.splitbill.data.repository.ScanCounterRepository
 import io.devexpert.splitbill.data.repository.TicketRepository
-import io.devexpert.splitbill.data.model.TicketData
-import io.devexpert.splitbill.framework.core.ImageConverter
 import io.devexpert.splitbill.framework.TicketProcessor
+import io.devexpert.splitbill.framework.core.ImageConverter
 import io.devexpert.splitbill.usecases.DecrementScanCounterUseCase
 import io.devexpert.splitbill.usecases.GetScansRemainingUseCase
 import io.devexpert.splitbill.usecases.InitializeScanCounterUseCase
@@ -56,20 +57,31 @@ fun HomeScreen(
 ) {
 
     val context = LocalContext.current
-    val getScansRemainingUseCase = remember { GetScansRemainingUseCase(scanCounterRepository) }
-    val scansLeft by getScansRemainingUseCase().collectAsState(initial = 0)
-    val isButtonEnabled = scansLeft > 0
+
 
     val initializeScanCounterUseCase =
         remember { InitializeScanCounterUseCase(scanCounterRepository) }
+    val getScansRemainingUseCase = remember { GetScansRemainingUseCase(scanCounterRepository) }
+
+    val factory =
+        remember { HomeViewModelFactory(initializeScanCounterUseCase, getScansRemainingUseCase) }
+    val viewModel: HomeViewModel = viewModel(factory = factory)
+
+
+    val scansLeft by viewModel.scansLeft.collectAsState(initial = 0)
+    val isButtonEnabled = scansLeft > 0
+
+
     val decrementScanCounterUseCase =
         remember { DecrementScanCounterUseCase(scanCounterRepository) }
+    val processTicketUseCase = remember { ProcessTicketUseCase(ticketRepository) }
 
 
     // Initialize or reset if needed when loading the screen
-    LaunchedEffect(Unit) {
-        initializeScanCounterUseCase()
-    }
+    /*    LaunchedEffect(Unit) {
+            // initializeScanCounterUseCase()
+        }*/
+    //  viewModel.initializeScanCounter()
 
     // Estado para almacenar la foto capturada (temporal, solo para pasarla a la IA)
     var capturedPhoto by remember { mutableStateOf<Bitmap?>(null) }
@@ -92,8 +104,6 @@ fun HomeScreen(
         val newHeight = (maxWidth * aspectRatio).toInt()
         return bitmap.scale(newWidth, newHeight)
     }
-
-    val processTicketUseCase = remember { ProcessTicketUseCase(ticketRepository) }
 
 
     // launcher to take a picture with the camera (high resolution)

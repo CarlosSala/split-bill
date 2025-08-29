@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
 
         val scanCounterDataSource = DataStoreScanCounterDataSource(this)
         val scanCounterRepository = ScanCounterRepository(scanCounterDataSource)
+
         setContent {
             SplitBillTheme {
                 val navController = rememberNavController()
