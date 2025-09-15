@@ -10,30 +10,35 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.devexpert.splitbill.BuildConfig
 import io.devexpert.splitbill.data.datasource.local.DataStoreScanCounterDataSource
-import io.devexpert.splitbill.data.datasource.remote.MLTicketDataSource
 import io.devexpert.splitbill.data.datasource.mock.MockTicketDataSource
+import io.devexpert.splitbill.data.datasource.remote.MLKitTicketDataSource
 import io.devexpert.splitbill.data.repository.ScanCounterRepository
 import io.devexpert.splitbill.data.repository.TicketRepository
 import io.devexpert.splitbill.ui.screens.receipt.ReceiptScreen
 import io.devexpert.splitbill.ui.screens.home.HomeScreen
 import io.devexpert.splitbill.ui.screens.home.HomeViewModel
+import io.devexpert.splitbill.ui.screens.receipt.ReceiptViewModel
 import io.devexpert.splitbill.ui.theme.SplitBillTheme
-import io.devexpert.splitbill.usecases.DecrementScanCounterUseCase
-import io.devexpert.splitbill.usecases.GetScansRemainingUseCase
-import io.devexpert.splitbill.usecases.InitializeScanCounterUseCase
-import io.devexpert.splitbill.usecases.ProcessTicketUseCase
+import io.devexpert.splitbill.domain.usecases.DecrementScanCounterUseCase
+import io.devexpert.splitbill.domain.usecases.GetScansRemainingUseCase
+import io.devexpert.splitbill.domain.usecases.GetTicketDataUseCase
+import io.devexpert.splitbill.domain.usecases.InitializeScanCounterUseCase
+import io.devexpert.splitbill.domain.usecases.ProcessTicketUseCase
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val ticketDataSource = if (BuildConfig.DEBUG) MockTicketDataSource() else MLTicketDataSource()
+        val ticketDataSource = if (BuildConfig.DEBUG) {
+            MockTicketDataSource()
+        } else {
+            MLKitTicketDataSource()
+        }
         val ticketRepository = TicketRepository(ticketDataSource)
 
         val scanCounterDataSource = DataStoreScanCounterDataSource(this)
         val scanCounterRepository = ScanCounterRepository(scanCounterDataSource)
-
 
         setContent {
             SplitBillTheme {
@@ -43,13 +48,13 @@ class MainActivity : ComponentActivity() {
                     startDestination = "home"
                 ) {
                     composable("home") {
-
                         val homeViewModel: HomeViewModel = viewModel {
                             HomeViewModel(
-                                InitializeScanCounterUseCase(scanCounterRepository),
-                                GetScansRemainingUseCase(scanCounterRepository),
-                                DecrementScanCounterUseCase(scanCounterRepository),
-                                ProcessTicketUseCase(ticketRepository)
+                                // use cases
+                                processTicketUseCase = ProcessTicketUseCase(ticketRepository),
+                                initializeScanCounterUseCase = InitializeScanCounterUseCase(scanCounterRepository),
+                                getScansRemainingUseCase = GetScansRemainingUseCase(scanCounterRepository),
+                                decrementScanCounterUseCase = DecrementScanCounterUseCase(scanCounterRepository)
                             )
                         }
                         HomeScreen(
@@ -61,8 +66,11 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("receipt") {
+                        val receiptViewModel: ReceiptViewModel = viewModel {
+                            ReceiptViewModel(GetTicketDataUseCase(ticketRepository))
+                        }
                         ReceiptScreen(
-                            ticketRepository = ticketRepository,
+                            viewModel = receiptViewModel,
                             onBackPressed = {
                                 navController.popBackStack()
                             }

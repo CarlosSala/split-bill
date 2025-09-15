@@ -1,6 +1,6 @@
 package io.devexpert.splitbill.data.repository
 
-import io.devexpert.splitbill.data.datasource.ScanCounterDataSource
+import io.devexpert.splitbill.data.datasource.local.ScanCounterDataSource
 import kotlinx.coroutines.flow.Flow
 
 class ScanCounterRepository(private val scanCounterDataSource: ScanCounterDataSource) {

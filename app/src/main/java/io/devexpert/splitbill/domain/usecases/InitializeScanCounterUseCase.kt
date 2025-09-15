@@ -1,4 +1,4 @@
-package io.devexpert.splitbill.usecases
+package io.devexpert.splitbill.domain.usecases
 
 import io.devexpert.splitbill.data.repository.ScanCounterRepository
 

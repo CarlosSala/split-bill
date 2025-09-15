@@ -3,10 +3,14 @@ package io.devexpert.splitbill.data.datasource.mock
 import android.util.Log
 import io.devexpert.splitbill.data.datasource.TicketDataSource
 import io.devexpert.splitbill.data.model.TicketData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 class MockTicketDataSource : TicketDataSource {
+
+    private val json = Json { ignoreUnknownKeys = true }
 
     companion object {
         private val MOCK_JSON: String
@@ -124,19 +128,14 @@ class MockTicketDataSource : TicketDataSource {
             """.trimIndent()
     }
 
-
-    override suspend fun processTicket(imageByte: ByteArray): TicketData {
-
-        Log.d("TicketProcessor", "Using mock data...")
-        // Simulate some delay
-        delay(1500)
-        // Parse the mock JSON using kotlinx.serialization
-        return Json {
-            ignoreUnknownKeys = true
-        }.decodeFromString<TicketData>(MOCK_JSON)
-
-
-    }
-
-
+    override suspend fun processTicket(imageByte: ByteArray): TicketData =
+        withContext(Dispatchers.IO) {
+            Log.d(
+                "MockTicketDataSource",
+                "Using mock data with image of size ${imageByte.size} bytes..."
+            )
+            delay(1500)
+            // Parse the mock JSON using kotlinx.serialization
+            json.decodeFromString<TicketData>(MOCK_JSON)
+        }
 }

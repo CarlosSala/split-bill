@@ -1,40 +1,77 @@
 package io.devexpert.splitbill.ui.screens.receipt
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.devexpert.splitbill.R
-import io.devexpert.splitbill.data.repository.TicketRepository
+import io.devexpert.splitbill.data.model.TicketData
 import io.devexpert.splitbill.data.model.TicketItem
-import io.devexpert.splitbill.usecases.GetTicketDataUseCase
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiptScreen(
-    ticketRepository: TicketRepository,
+    viewModel: ReceiptViewModel,
     onBackPressed: () -> Unit
 ) {
 
-    val getTicketDataUseCase = remember { GetTicketDataUseCase(ticketRepository) }
+    val uiState by viewModel.uiState.collectAsState()
 
-    val ticketData = remember { getTicketDataUseCase() }
+    ReceiptScreen(
+        uiState = uiState,
+        onBackPressed = onBackPressed,
+        onQuantityChange = viewModel::onQuantityChange,
+        onMarkAsPaid = viewModel::onMarkAsPaid
+    )
+}
 
-    if (ticketData == null) {
-        // if there is no ticket data, show error and back button
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReceiptScreen(
+    uiState: DetailUiState,
+    onBackPressed: () -> Unit,
+    onQuantityChange: (TicketItem, Int) -> Unit,
+    onMarkAsPaid: () -> Unit
+) {
+    if (uiState.ticketData == null) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -53,33 +90,6 @@ fun ReceiptScreen(
         }
         return
     }
-
-    // states to manage selected quantities and paid items
-    // associate each ticket item with its selected quantity
-    var selectedQuantities by remember {
-        mutableStateOf(ticketData.items.associateWith { item -> 0 })
-    }
-    var paidQuantities by remember {
-        mutableStateOf(ticketData.items.associateWith { item -> 0 })
-    }
-
-    // Calculate total selected
-    val selectedTotal = selectedQuantities.entries.sumOf { (item, quantity) ->
-        item.price * quantity
-    }
-
-    // calculate available items (not paid)
-    val availableItems = ticketData.items.map { item ->
-        val paidQty = paidQuantities[item] ?: 0
-        val availableQty = item.quantity - paidQty
-        item to availableQty
-    }.filter { it.second > 0 }
-
-    // paid items
-    val paidItems = ticketData.items.map { item ->
-        val paidQty = paidQuantities[item] ?: 0
-        item to paidQty
-    }.filter { it.second > 0 }
 
     Scaffold(
         topBar = {
@@ -103,28 +113,25 @@ fun ReceiptScreen(
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
+
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Items available
-                items(availableItems) { (item, availableQty) ->
-                    val selectedQty = selectedQuantities[item] ?: 0
+                items(uiState.availableItems) { (item, availableQty) ->
+                    val selectedQty = uiState.selectedQuantities[item] ?: 0
 
                     SelectableTicketItemCard(
                         item = item,
                         availableQuantity = availableQty,
                         selectedQuantity = selectedQty,
                         onQuantityChange = { newQty ->
-                            selectedQuantities = selectedQuantities.toMutableMap().apply {
-                                this[item] = newQty
-                            }
+                            onQuantityChange(item, newQty)
                         }
                     )
                 }
 
-                // paid items (ticked)
-                items(paidItems) { (item, paidQty) ->
+                items(uiState.paidItems) { (item, paidQty) ->
                     PaidTicketItemCard(
                         item = item,
                         paidQuantity = paidQty
@@ -132,8 +139,7 @@ fun ReceiptScreen(
                 }
             }
 
-            // total selected and pay button
-            if (selectedTotal > 0) {
+            if (uiState.selectedTotal > 0) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Card(
@@ -156,7 +162,13 @@ fun ReceiptScreen(
                                 fontWeight = FontWeight.Medium
                             )
                             Text(
-                                text = "€${String.format("%.2f", selectedTotal)}",
+                                text = "€${
+                                    String.format(
+                                        Locale.getDefault(),
+                                        "%.2f",
+                                        uiState.selectedTotal
+                                    )
+                                }",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
@@ -166,21 +178,10 @@ fun ReceiptScreen(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Button(
-                            onClick = {
-                                // check each selected item and add to paidQuantities
-                                paidQuantities = paidQuantities.toMutableMap().apply {
-                                    selectedQuantities.forEach { (item, selectedQty) ->
-                                        if (selectedQty > 0) {
-                                            this[item] = (this[item] ?: 0) + selectedQty
-                                        }
-                                    }
-                                }
-                                // clear selection
-                                selectedQuantities = selectedQuantities.mapValues { 0 }
-                            },
+                            onClick = onMarkAsPaid,
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF4CAF50) // Verde
+                                containerColor = Color(0xFF4CAF50)
                             )
                         ) {
                             Text(
@@ -212,7 +213,6 @@ fun SelectableTicketItemCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // original quantity in circle
             Box(
                 modifier = Modifier
                     .size(40.dp),
@@ -233,7 +233,6 @@ fun SelectableTicketItemCard(
                 }
             }
 
-            // information of the item
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -245,15 +244,17 @@ fun SelectableTicketItemCard(
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = "€${String.format("%.2f", item.price)} ${stringResource(R.string.each)}",
+                    text = "€${String.format(Locale.getDefault(), "%.2f", item.price)} ${
+                        stringResource(
+                            R.string.each
+                        )
+                    }",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            // selection controls
             if (availableQuantity == 1) {
-                // checkbox for items with quantity 1
                 Checkbox(
                     checked = selectedQuantity > 0,
                     onCheckedChange = { checked ->
@@ -261,7 +262,6 @@ fun SelectableTicketItemCard(
                     }
                 )
             } else {
-                // counter with +/- buttons for items with quantity > 1
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -322,7 +322,6 @@ fun PaidTicketItemCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // quantity in a circle with strikethrough
             Box(
                 modifier = Modifier
                     .size(40.dp),
@@ -345,7 +344,6 @@ fun PaidTicketItemCard(
                 }
             }
 
-            // information of the item with strikethrough
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -359,16 +357,19 @@ fun PaidTicketItemCard(
                     textDecoration = TextDecoration.LineThrough
                 )
                 Text(
-                    text = "€${String.format("%.2f", item.price)} ${stringResource(R.string.each)}",
+                    text = "€${String.format(Locale.getDefault(), "%.2f", item.price)} ${
+                        stringResource(
+                            R.string.each
+                        )
+                    }",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textDecoration = TextDecoration.LineThrough
                 )
             }
 
-            // total price paid
             Text(
-                text = "€${String.format("%.2f", item.price * paidQuantity)}",
+                text = "€${String.format(Locale.getDefault(), "%.2f", item.price * paidQuantity)}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -376,4 +377,82 @@ fun PaidTicketItemCard(
             )
         }
     }
-} 
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ReceiptScreenContentPreview() {
+    val sampleItems = listOf(
+        TicketItem(name = "Pizza Margherita", quantity = 2, price = 12.50),
+        TicketItem(name = "Pasta Carbonara", quantity = 1, price = 14.00),
+        TicketItem(name = "Tiramisu", quantity = 2, price = 6.50)
+    )
+
+    val sampleTicketData = TicketData(
+        items = sampleItems,
+        total = 51.50
+    )
+
+    ReceiptScreen(
+        uiState = DetailUiState(
+            ticketData = sampleTicketData,
+            availableItems = listOf(
+                sampleItems[0] to 2,
+                sampleItems[1] to 1,
+                sampleItems[2] to 1
+            ),
+            paidItems = listOf(
+                sampleItems[2] to 1
+            ),
+            selectedQuantities = mapOf(
+                sampleItems[0] to 1,
+                sampleItems[1] to 1
+            ),
+            selectedTotal = 26.50
+        ),
+        onBackPressed = {},
+        onQuantityChange = { _, _ -> },
+        onMarkAsPaid = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ReceiptScreenContentEmptyPreview() {
+    ReceiptScreen(
+        uiState = DetailUiState(ticketData = null),
+        onBackPressed = {},
+        onQuantityChange = { _, _ -> },
+        onMarkAsPaid = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ReceiptScreenContentAllPaidPreview() {
+    val sampleItems = listOf(
+        TicketItem(name = "Hamburger", quantity = 1, price = 8.50),
+        TicketItem(name = "French Fries", quantity = 1, price = 4.00)
+    )
+
+    val sampleTicketData = TicketData(
+        items = sampleItems,
+        total = 12.50
+    )
+
+    ReceiptScreen(
+        uiState = DetailUiState(
+            ticketData = sampleTicketData,
+            availableItems = emptyList(),
+            paidItems = listOf(
+                sampleItems[0] to 1,
+                sampleItems[1] to 1
+            ),
+            selectedQuantities = emptyMap(),
+            selectedTotal = 0.0
+        ),
+        onBackPressed = {},
+        onQuantityChange = { _, _ -> },
+        onMarkAsPaid = {}
+    )
+}

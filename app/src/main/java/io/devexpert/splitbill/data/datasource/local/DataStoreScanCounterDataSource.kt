@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import io.devexpert.splitbill.data.datasource.ScanCounterDataSource
+import io.devexpert.splitbill.data.datasource.local.ScanCounterDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -15,7 +15,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 // Extension function to DataStore
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "scan_counter")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "scan_counter")
 
 class DataStoreScanCounterDataSource(private val context: Context) : ScanCounterDataSource {
 
@@ -69,10 +69,5 @@ class DataStoreScanCounterDataSource(private val context: Context) : ScanCounter
                 preferences[SCANS_REMAINING_KEY] = current - 1
             }
         }
-    }
-
-    // gets the current number of scans remaining (for immediate use)
-    suspend fun getCurrentScans(): Int {
-        return context.dataStore.data.first()[SCANS_REMAINING_KEY] ?: MAX_SCANS_PER_MONTH
     }
 }
