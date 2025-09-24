@@ -42,7 +42,7 @@ object AppModule {
         return scanCounterRepository!!
     }
 
-    fun provideProcessTicketUseCase(context: Context): ProcessTicketUseCase {
+    fun provideProcessTicketUseCase(): ProcessTicketUseCase {
         return ProcessTicketUseCase(provideTicketRepository())
     }
 
@@ -58,22 +58,22 @@ object AppModule {
         return DecrementScanCounterUseCase(provideScanCounterRepository(context))
     }
 
-    fun provideGetTicketUseCase(context: Context): GetTicketDataUseCase {
+    fun provideGetTicketUseCase(): GetTicketDataUseCase {
         return GetTicketDataUseCase(provideTicketRepository())
     }
 
-    fun createHomeViewModel(context: Context): HomeViewModel {
+    fun provideHomeViewModel(context: Context): HomeViewModel {
         return HomeViewModel(
-            processTicketUseCase = provideProcessTicketUseCase(context),
+            processTicketUseCase = provideProcessTicketUseCase(),
             initializeScanCounterUseCase = provideInitializeScanCounterUseCase(context),
             getScansRemainingUseCase = provideGetScansRemainingUseCase(context),
             decrementScanCounterUseCase = provideDecrementScanCounterUseCase(context)
         )
     }
 
-    fun createReceiptViewModel(context: Context): ReceiptViewModel {
+    fun provideReceiptViewModel(): ReceiptViewModel {
         return ReceiptViewModel(
-            getTicketDataUseCase = provideGetTicketUseCase(context)
+            getTicketDataUseCase = provideGetTicketUseCase()
         )
     }
 }
