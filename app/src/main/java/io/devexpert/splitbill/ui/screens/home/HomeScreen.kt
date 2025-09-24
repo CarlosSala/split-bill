@@ -85,6 +85,7 @@ fun HomeScreen(
                         fontWeight = FontWeight.Bold
                     )
                 }
+                // text below the button
                 when {
                     uiState.isProcessing -> {
                         Text(

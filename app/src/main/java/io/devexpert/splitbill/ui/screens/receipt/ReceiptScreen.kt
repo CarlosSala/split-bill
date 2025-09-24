@@ -118,9 +118,12 @@ fun ReceiptScreen(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                // availableItems return a list of Pair<TicketItem, Int> with the item and
+                // the available quantity
                 items(uiState.availableItems) { (item, availableQty) ->
+                    // selectedQuantities[item] will return the selected quantity of the item
                     val selectedQty = uiState.selectedQuantities[item] ?: 0
-
+                    // when there's available items to pay this card will be shown
                     SelectableTicketItemCard(
                         item = item,
                         availableQuantity = availableQty,
@@ -398,15 +401,17 @@ fun ReceiptScreenContentPreview() {
             ticketData = sampleTicketData,
             availableItems = listOf(
                 sampleItems[0] to 2,
-                sampleItems[1] to 1,
+                sampleItems[1] to 4,
                 sampleItems[2] to 1
             ),
             paidItems = listOf(
-                sampleItems[2] to 1
+                sampleItems[2] to 1,
+                sampleItems[0] to 1,
             ),
             selectedQuantities = mapOf(
                 sampleItems[0] to 1,
-                sampleItems[1] to 1
+                sampleItems[1] to 1,
+                sampleItems[2] to 0,
             ),
             selectedTotal = 26.50
         ),

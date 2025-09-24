@@ -37,8 +37,12 @@ fun rememberCameraState(
         }
     }
     // if any of keys change the state will be reset
-    return remember(context, cameraLauncher) {
-        CameraState(context, cameraLauncher) { uri ->
+    return remember( key1 = context, key2 = cameraLauncher
+    ) {
+        CameraState(
+            context = context,
+            cameraLauncher = cameraLauncher
+        ) { uri ->
             photoUri = uri
         }
     }

@@ -61,20 +61,30 @@ class ReceiptViewModel(
     }
 
     private fun updateUi() {
+
         _uiState.update { currentState ->
+            // if ticketData is null, return currentState without updating anything
             val ticketData = currentState.ticketData ?: return@update currentState
 
+            // inside ticketData there's a list of TicketItem with the name, quantity and price
             val availableItems = ticketData.items.map { item ->
-                val paidQty = currentState.paidQuantities[item] ?: 0
-                val availableQty = item.quantity - paidQty
-                item to availableQty
+                // paidQuantities is a map of TicketItem to Int with the quantity of each item
+                // if the item is not in paidQuantities, the quantity is 0
+                val paidQuantities = currentState.paidQuantities[item] ?: 0
+                // quantity total of item minus the quantity of items paid
+                val availableQuantity = item.quantity - paidQuantities
+                // "to" create a Pair of TicketItem and Int with the item and the available quantity
+                // if the available quantity is greater than 0
+                item to availableQuantity
             }.filter { it.second > 0 }
 
+            // get the list of items that have been paid
             val paidItems = ticketData.items.map { item ->
                 val paidQty = currentState.paidQuantities[item] ?: 0
                 item to paidQty
             }.filter { it.second > 0 }
 
+            // get the toral price of the selected items
             val selectedTotal = currentState.selectedQuantities.entries.sumOf { (item, quantity) ->
                 item.price * quantity
             }
