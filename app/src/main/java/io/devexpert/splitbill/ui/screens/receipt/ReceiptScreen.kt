@@ -41,17 +41,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.devexpert.splitbill.R
 import io.devexpert.splitbill.data.model.TicketData
 import io.devexpert.splitbill.data.model.TicketItem
-import io.devexpert.splitbill.di.AppModule
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiptScreen(
-    viewModel: ReceiptViewModel = viewModel { AppModule.provideReceiptViewModel() },
+    viewModel: ReceiptViewModel = hiltViewModel(),
     onBackPressed: () -> Unit
 ) {
 

@@ -1,13 +1,16 @@
 package io.devexpert.splitbill.ui.screens.receipt
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.devexpert.splitbill.data.model.TicketItem
 import io.devexpert.splitbill.domain.usecases.GetTicketDataUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class ReceiptViewModel(
+@HiltViewModel
+class ReceiptViewModel @Inject constructor(
     private val getTicketDataUseCase: GetTicketDataUseCase
 ) : ViewModel() {
 

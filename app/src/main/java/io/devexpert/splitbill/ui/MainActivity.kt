@@ -7,10 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import io.devexpert.splitbill.ui.screens.home.HomeScreen
 import io.devexpert.splitbill.ui.screens.receipt.ReceiptScreen
 import io.devexpert.splitbill.ui.theme.SplitBillTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
