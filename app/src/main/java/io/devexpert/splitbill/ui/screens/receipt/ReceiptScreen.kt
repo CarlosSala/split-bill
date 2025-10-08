@@ -42,10 +42,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.devexpert.splitbill.R
-import io.devexpert.splitbill.data.model.TicketData
-import io.devexpert.splitbill.data.model.TicketItem
+import io.devexpert.splitbill.ui.model.ItemUi
+import io.devexpert.splitbill.ui.model.TicketUi
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +69,7 @@ fun ReceiptScreen(
 fun ReceiptScreen(
     uiState: DetailUiState,
     onBackPressed: () -> Unit,
-    onQuantityChange: (TicketItem, Int) -> Unit,
+    onQuantityChange: (ItemUi, Int) -> Unit,
     onMarkAsPaid: () -> Unit
 ) {
     if (uiState.ticketData == null) {
@@ -204,7 +203,7 @@ fun ReceiptScreen(
 
 @Composable
 fun SelectableTicketItemCard(
-    item: TicketItem,
+    item: ItemUi,
     availableQuantity: Int,
     selectedQuantity: Int,
     onQuantityChange: (Int) -> Unit
@@ -312,7 +311,7 @@ fun SelectableTicketItemCard(
 
 @Composable
 fun PaidTicketItemCard(
-    item: TicketItem,
+    item: ItemUi,
     paidQuantity: Int
 ) {
     Card(
@@ -388,12 +387,12 @@ fun PaidTicketItemCard(
 @Composable
 fun ReceiptScreenContentPreview() {
     val sampleItems = listOf(
-        TicketItem(name = "Pizza Margherita", quantity = 2, price = 12.50),
-        TicketItem(name = "Pasta Carbonara", quantity = 1, price = 14.00),
-        TicketItem(name = "Tiramisu", quantity = 2, price = 6.50)
+        ItemUi(name = "Pizza Margherita", quantity = 2, price = 12.50),
+        ItemUi(name = "Pasta Carbonara", quantity = 1, price = 14.00),
+        ItemUi(name = "Tiramisu", quantity = 2, price = 6.50)
     )
 
-    val sampleTicketData = TicketData(
+    val sampleTicketData = TicketUi(
         items = sampleItems,
         total = 51.50
     )
@@ -438,11 +437,11 @@ fun ReceiptScreenContentEmptyPreview() {
 @Composable
 fun ReceiptScreenContentAllPaidPreview() {
     val sampleItems = listOf(
-        TicketItem(name = "Hamburger", quantity = 1, price = 8.50),
-        TicketItem(name = "French Fries", quantity = 1, price = 4.00)
+        ItemUi(name = "Hamburger", quantity = 1, price = 8.50),
+        ItemUi(name = "French Fries", quantity = 1, price = 4.00)
     )
 
-    val sampleTicketData = TicketData(
+    val sampleTicketData = TicketUi(
         items = sampleItems,
         total = 12.50
     )

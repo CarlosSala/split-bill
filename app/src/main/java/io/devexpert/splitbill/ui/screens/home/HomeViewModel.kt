@@ -3,12 +3,12 @@ package io.devexpert.splitbill.ui.screens.home
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.usecases.DecrementScanCounterUseCase
+import com.example.domain.usecases.GetScansRemainingUseCase
+import com.example.domain.usecases.InitializeScanCounterUseCase
+import com.example.domain.usecases.ProcessTicketUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.devexpert.splitbill.ui.core.ImageConverter
-import io.devexpert.splitbill.domain.usecases.DecrementScanCounterUseCase
-import io.devexpert.splitbill.domain.usecases.GetScansRemainingUseCase
-import io.devexpert.splitbill.domain.usecases.InitializeScanCounterUseCase
-import io.devexpert.splitbill.domain.usecases.ProcessTicketUseCase
+import com.example.data.core.ImageConverter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,9 +1,10 @@
 package io.devexpert.splitbill.ui.screens.receipt
 
 import androidx.lifecycle.ViewModel
+import com.example.domain.usecases.GetTicketDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.devexpert.splitbill.data.model.TicketItem
-import io.devexpert.splitbill.domain.usecases.GetTicketDataUseCase
+import io.devexpert.splitbill.ui.model.ItemUi
+import io.devexpert.splitbill.ui.model.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -22,7 +23,7 @@ class ReceiptViewModel @Inject constructor(
     }
 
     private fun loadTicketData() {
-        val ticketData = getTicketDataUseCase()
+        val ticketData = getTicketDataUseCase()?.toUi()
         if (ticketData != null) {
             _uiState.update {
                 it.copy(
@@ -35,7 +36,7 @@ class ReceiptViewModel @Inject constructor(
         updateUi()
     }
 
-    fun onQuantityChange(item: TicketItem, newQuantity: Int) {
+    fun onQuantityChange(item: ItemUi, newQuantity: Int) {
         _uiState.update { currentState ->
             val newSelectedQuantities = currentState.selectedQuantities.toMutableMap()
             newSelectedQuantities[item] = newQuantity

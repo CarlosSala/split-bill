@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "SplitBill"
 include(":app")
+include(":data")
+include(":domain")
