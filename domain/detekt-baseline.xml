@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FinalNewline:DecrementScanCounterUseCase.kt$com.example.domain.usecases.DecrementScanCounterUseCase.kt</ID>
+    <ID>FinalNewline:GetScansRemainingUseCase.kt$com.example.domain.usecases.GetScansRemainingUseCase.kt</ID>
+    <ID>FinalNewline:GetTicketDataUseCase.kt$com.example.domain.usecases.GetTicketDataUseCase.kt</ID>
+    <ID>FinalNewline:InitializeScanCounterUseCase.kt$com.example.domain.usecases.InitializeScanCounterUseCase.kt</ID>
+    <ID>FinalNewline:ProcessTicketUseCase.kt$com.example.domain.usecases.ProcessTicketUseCase.kt</ID>
+    <ID>FinalNewline:ScanCounterRepository.kt$com.example.domain.repository.ScanCounterRepository.kt</ID>
+    <ID>FinalNewline:Ticket.kt$com.example.domain.model.Ticket.kt</ID>
+    <ID>FinalNewline:TicketRepository.kt$com.example.domain.repository.TicketRepository.kt</ID>
+    <ID>ImportOrdering:GetScansRemainingUseCase.kt$import com.example.domain.repository.ScanCounterRepository import javax.inject.Inject import kotlinx.coroutines.flow.Flow</ID>
+    <ID>Indentation:Ticket.kt$Item$ </ID>
+    <ID>NewLineAtEndOfFile:DecrementScanCounterUseCase.kt$com.example.domain.usecases.DecrementScanCounterUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetScansRemainingUseCase.kt$com.example.domain.usecases.GetScansRemainingUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetTicketDataUseCase.kt$com.example.domain.usecases.GetTicketDataUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:InitializeScanCounterUseCase.kt$com.example.domain.usecases.InitializeScanCounterUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:ProcessTicketUseCase.kt$com.example.domain.usecases.ProcessTicketUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:ScanCounterRepository.kt$com.example.domain.repository.ScanCounterRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:Ticket.kt$com.example.domain.model.Ticket.kt</ID>
+    <ID>NewLineAtEndOfFile:TicketRepository.kt$com.example.domain.repository.TicketRepository.kt</ID>
+    <ID>NoBlankLineBeforeRbrace:DecrementScanCounterUseCase.kt$DecrementScanCounterUseCase$ </ID>
+    <ID>NoConsecutiveBlankLines:DecrementScanCounterUseCase.kt$ </ID>
+    <ID>NoConsecutiveBlankLines:ProcessTicketUseCase.kt$ </ID>
+    <ID>NoConsecutiveBlankLines:Ticket.kt$ </ID>
+    <ID>NoConsecutiveBlankLines:TicketRepository.kt$ </ID>
+  </CurrentIssues>
+</SmellBaseline>

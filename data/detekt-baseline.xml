@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>Filename:MLTicketDataSource.kt$com.example.data.datasource.remote.MLTicketDataSource.kt</ID>
+    <ID>FinalNewline:DataModule.kt$com.example.data.DataModule.kt</ID>
+    <ID>FinalNewline:ExampleUnitTest.kt$com.example.data.ExampleUnitTest.kt</ID>
+    <ID>FinalNewline:ImageConverter.kt$com.example.data.core.ImageConverter.kt</ID>
+    <ID>FinalNewline:MLTicketDataSource.kt$com.example.data.datasource.remote.MLTicketDataSource.kt</ID>
+    <ID>FinalNewline:MockTicketDataSource.kt$com.example.data.datasource.mock.MockTicketDataSource.kt</ID>
+    <ID>FinalNewline:ScanCounterDataSource.kt$com.example.data.datasource.local.ScanCounterDataSource.kt</ID>
+    <ID>FinalNewline:ScanCounterRepositoryImpl.kt$com.example.data.repository.ScanCounterRepositoryImpl.kt</ID>
+    <ID>FinalNewline:TicketData.kt$com.example.data.model.TicketData.kt</ID>
+    <ID>FinalNewline:TicketDataSource.kt$com.example.data.datasource.TicketDataSource.kt</ID>
+    <ID>FinalNewline:TicketRepositoryImpl.kt$com.example.data.repository.TicketRepositoryImpl.kt</ID>
+    <ID>ImportOrdering:DataModule.kt$import android.content.Context import com.example.data.datasource.TicketDataSource import com.example.data.datasource.local.DataStoreScanCounterDataSource import com.example.data.datasource.local.ScanCounterDataSource import com.example.data.datasource.mock.MockTicketDataSource import com.example.data.datasource.remote.MLKitTicketDataSource import com.example.data.repository.ScanCounterRepositoryImpl import dagger.Module import dagger.Provides import dagger.hilt.InstallIn import dagger.hilt.android.qualifiers.ApplicationContext import dagger.hilt.components.SingletonComponent import javax.inject.Qualifier import javax.inject.Singleton import com.example.data.BuildConfig import com.example.data.repository.TicketRepositoryImpl import com.example.domain.repository.ScanCounterRepository import com.example.domain.repository.TicketRepository</ID>
+    <ID>ImportOrdering:ExampleUnitTest.kt$import org.junit.Test import org.junit.Assert.*</ID>
+    <ID>ImportOrdering:MLTicketDataSource.kt$import android.util.Log import com.example.data.core.ImageConverter import com.google.firebase.Firebase import com.google.firebase.ai.ai import com.google.firebase.ai.type.Schema import com.google.firebase.ai.type.content import com.google.firebase.ai.type.generationConfig import com.example.data.datasource.TicketDataSource import com.example.data.model.TicketData import kotlinx.coroutines.Dispatchers import kotlinx.coroutines.withContext import kotlinx.serialization.json.Json</ID>
+    <ID>MagicNumber:MockTicketDataSource.kt$MockTicketDataSource$1500</ID>
+    <ID>MatchingDeclarationName:MLTicketDataSource.kt$MLKitTicketDataSource : TicketDataSource</ID>
+    <ID>NewLineAtEndOfFile:DataModule.kt$com.example.data.DataModule.kt</ID>
+    <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$com.example.data.ExampleUnitTest.kt</ID>
+    <ID>NewLineAtEndOfFile:ImageConverter.kt$com.example.data.core.ImageConverter.kt</ID>
+    <ID>NewLineAtEndOfFile:MLTicketDataSource.kt$com.example.data.datasource.remote.MLTicketDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:MockTicketDataSource.kt$com.example.data.datasource.mock.MockTicketDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:ScanCounterDataSource.kt$com.example.data.datasource.local.ScanCounterDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:ScanCounterRepositoryImpl.kt$com.example.data.repository.ScanCounterRepositoryImpl.kt</ID>
+    <ID>NewLineAtEndOfFile:TicketData.kt$com.example.data.model.TicketData.kt</ID>
+    <ID>NewLineAtEndOfFile:TicketDataSource.kt$com.example.data.datasource.TicketDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:TicketRepositoryImpl.kt$com.example.data.repository.TicketRepositoryImpl.kt</ID>
+    <ID>NoBlankLineBeforeRbrace:DataModule.kt$DataModule$ </ID>
+    <ID>NoBlankLineBeforeRbrace:MLTicketDataSource.kt$MLKitTicketDataSource$ </ID>
+    <ID>NoConsecutiveBlankLines:TicketData.kt$ </ID>
+    <ID>NoEmptyFirstLineInMethodBlock:DataStoreScanCounterDataSource.kt$DataStoreScanCounterDataSource$ </ID>
+    <ID>NoUnusedImports:DataModule.kt$com.example.data.DataModule.kt</ID>
+    <ID>NoWildcardImports:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
+    <ID>TooGenericExceptionCaught:MLTicketDataSource.kt$MLKitTicketDataSource$e: Exception</ID>
+    <ID>TooGenericExceptionThrown:MLTicketDataSource.kt$MLKitTicketDataSource$throw Exception("There is no IA response text")</ID>
+    <ID>WildcardImport:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
+  </CurrentIssues>
+</SmellBaseline>

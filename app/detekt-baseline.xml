@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ArgumentListWrapping:CamaraState.kt$( key1 = context, key2 = cameraLauncher )</ID>
+    <ID>BlockCommentInitialStarAlignment:Theme.kt$/* Other default colors to override background = Color(0xFFFFFBFE), surface = Color(0xFFFFFBFE), onPrimary = Color.White, onSecondary = Color.White, onTertiary = Color.White, onBackground = Color(0xFF1C1B1F), onSurface = Color(0xFF1C1B1F), */</ID>
+    <ID>BlockCommentInitialStarAlignment:Type.kt$/* Other default text styles to override titleLarge = TextStyle( fontFamily = FontFamily.Default, fontWeight = FontWeight.Normal, fontSize = 22.sp, lineHeight = 28.sp, letterSpacing = 0.sp ), labelSmall = TextStyle( fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp ) */</ID>
+    <ID>Filename:CamaraState.kt$io.devexpert.splitbill.ui.util.CamaraState.kt</ID>
+    <ID>FinalNewline:CamaraState.kt$io.devexpert.splitbill.ui.util.CamaraState.kt</ID>
+    <ID>FinalNewline:Color.kt$io.devexpert.splitbill.ui.theme.Color.kt</ID>
+    <ID>FinalNewline:ExampleUnitTest.kt$io.devexpert.splitbill.ExampleUnitTest.kt</ID>
+    <ID>FinalNewline:HomeUiState.kt$io.devexpert.splitbill.ui.screens.home.HomeUiState.kt</ID>
+    <ID>FinalNewline:HomeViewModel.kt$io.devexpert.splitbill.ui.screens.home.HomeViewModel.kt</ID>
+    <ID>FinalNewline:MainActivity.kt$io.devexpert.splitbill.ui.MainActivity.kt</ID>
+    <ID>FinalNewline:ReceiptScreen.kt$io.devexpert.splitbill.ui.screens.receipt.ReceiptScreen.kt</ID>
+    <ID>FinalNewline:ReceiptViewModel.kt$io.devexpert.splitbill.ui.screens.receipt.ReceiptViewModel.kt</ID>
+    <ID>FinalNewline:SplitBill.kt$io.devexpert.splitbill.SplitBill.kt</ID>
+    <ID>FinalNewline:Theme.kt$io.devexpert.splitbill.ui.theme.Theme.kt</ID>
+    <ID>FinalNewline:Ticket.kt$io.devexpert.splitbill.ui.model.Ticket.kt</ID>
+    <ID>FinalNewline:Type.kt$io.devexpert.splitbill.ui.theme.Type.kt</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun HomeScreen( uiState: HomeUiState, onScanClicked: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun HomeScreen( viewModel: HomeViewModel = hiltViewModel(), onTicketProcessed: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Preview(showBackground = true) @Composable fun HomeScreenContentErrorPreview()</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Preview(showBackground = true) @Composable fun HomeScreenContentNoScansPreview()</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Preview(showBackground = true) @Composable fun HomeScreenContentPreview()</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Preview(showBackground = true) @Composable fun HomeScreenContentProcessingPreview()</ID>
+    <ID>FunctionNaming:ReceiptScreen.kt$@Composable fun PaidTicketItemCard( item: ItemUi, paidQuantity: Int )</ID>
+    <ID>FunctionNaming:ReceiptScreen.kt$@Composable fun SelectableTicketItemCard( item: ItemUi, availableQuantity: Int, selectedQuantity: Int, onQuantityChange: (Int) -&gt; Unit )</ID>
+    <ID>FunctionNaming:ReceiptScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ReceiptScreen( uiState: DetailUiState, onBackPressed: () -&gt; Unit, onQuantityChange: (ItemUi, Int) -&gt; Unit, onMarkAsPaid: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:ReceiptScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ReceiptScreen( viewModel: ReceiptViewModel = hiltViewModel(), onBackPressed: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:ReceiptScreen.kt$@Preview(showBackground = true) @Composable fun ReceiptScreenContentAllPaidPreview()</ID>
+    <ID>FunctionNaming:ReceiptScreen.kt$@Preview(showBackground = true) @Composable fun ReceiptScreenContentEmptyPreview()</ID>
+    <ID>FunctionNaming:ReceiptScreen.kt$@Preview(showBackground = true) @Composable fun ReceiptScreenContentPreview()</ID>
+    <ID>FunctionNaming:Theme.kt$@Composable fun SplitBillTheme( darkTheme: Boolean = isSystemInDarkTheme(), // Dynamic color is available on Android 12+ dynamicColor: Boolean = true, content: @Composable () -&gt; Unit )</ID>
+    <ID>ImportOrdering:ExampleUnitTest.kt$import org.junit.Test import org.junit.Assert.*</ID>
+    <ID>ImportOrdering:HomeViewModel.kt$import android.graphics.Bitmap import androidx.lifecycle.ViewModel import androidx.lifecycle.viewModelScope import com.example.domain.usecases.DecrementScanCounterUseCase import com.example.domain.usecases.GetScansRemainingUseCase import com.example.domain.usecases.InitializeScanCounterUseCase import com.example.domain.usecases.ProcessTicketUseCase import dagger.hilt.android.lifecycle.HiltViewModel import com.example.data.core.ImageConverter import kotlinx.coroutines.flow.MutableStateFlow import kotlinx.coroutines.flow.StateFlow import kotlinx.coroutines.flow.asStateFlow import kotlinx.coroutines.launch import javax.inject.Inject</ID>
+    <ID>Indentation:MainActivity.kt$MainActivity$ </ID>
+    <ID>LongMethod:ReceiptScreen.kt$@Composable fun PaidTicketItemCard( item: ItemUi, paidQuantity: Int )</ID>
+    <ID>LongMethod:ReceiptScreen.kt$@Composable fun SelectableTicketItemCard( item: ItemUi, availableQuantity: Int, selectedQuantity: Int, onQuantityChange: (Int) -&gt; Unit )</ID>
+    <ID>LongMethod:ReceiptScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ReceiptScreen( uiState: DetailUiState, onBackPressed: () -&gt; Unit, onQuantityChange: (ItemUi, Int) -&gt; Unit, onMarkAsPaid: () -&gt; Unit )</ID>
+    <ID>MagicNumber:Color.kt$0xFF625b71</ID>
+    <ID>MagicNumber:Color.kt$0xFF6650a4</ID>
+    <ID>MagicNumber:Color.kt$0xFF7D5260</ID>
+    <ID>MagicNumber:Color.kt$0xFFCCC2DC</ID>
+    <ID>MagicNumber:Color.kt$0xFFD0BCFF</ID>
+    <ID>MagicNumber:Color.kt$0xFFEFB8C8</ID>
+    <ID>MagicNumber:ReceiptScreen.kt$0xFF4CAF50</ID>
+    <ID>MagicNumber:ReceiptScreen.kt$4</ID>
+    <ID>MultiLineIfElse:HomeScreen.kt$stringResource(R.string.no_scans_remaining)</ID>
+    <ID>MultiLineIfElse:HomeScreen.kt$stringResource(R.string.processing)</ID>
+    <ID>MultiLineIfElse:HomeScreen.kt$stringResource(R.string.scan_ticket)</ID>
+    <ID>MultiLineIfElse:HomeScreen.kt$stringResource(R.string.scans_remaining, uiState.scansLeft)</ID>
+    <ID>NewLineAtEndOfFile:CamaraState.kt$io.devexpert.splitbill.ui.util.CamaraState.kt</ID>
+    <ID>NewLineAtEndOfFile:Color.kt$io.devexpert.splitbill.ui.theme.Color.kt</ID>
+    <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$io.devexpert.splitbill.ExampleUnitTest.kt</ID>
+    <ID>NewLineAtEndOfFile:HomeUiState.kt$io.devexpert.splitbill.ui.screens.home.HomeUiState.kt</ID>
+    <ID>NewLineAtEndOfFile:HomeViewModel.kt$io.devexpert.splitbill.ui.screens.home.HomeViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:MainActivity.kt$io.devexpert.splitbill.ui.MainActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:ReceiptScreen.kt$io.devexpert.splitbill.ui.screens.receipt.ReceiptScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:ReceiptViewModel.kt$io.devexpert.splitbill.ui.screens.receipt.ReceiptViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:SplitBill.kt$io.devexpert.splitbill.SplitBill.kt</ID>
+    <ID>NewLineAtEndOfFile:Theme.kt$io.devexpert.splitbill.ui.theme.Theme.kt</ID>
+    <ID>NewLineAtEndOfFile:Ticket.kt$io.devexpert.splitbill.ui.model.Ticket.kt</ID>
+    <ID>NewLineAtEndOfFile:Type.kt$io.devexpert.splitbill.ui.theme.Type.kt</ID>
+    <ID>NoConsecutiveBlankLines:DetailUiState.kt$ </ID>
+    <ID>NoConsecutiveBlankLines:HomeScreen.kt$ </ID>
+    <ID>NoConsecutiveBlankLines:Ticket.kt$ </ID>
+    <ID>NoEmptyFirstLineInMethodBlock:CamaraState.kt$ </ID>
+    <ID>NoEmptyFirstLineInMethodBlock:ReceiptScreen.kt$ </ID>
+    <ID>NoEmptyFirstLineInMethodBlock:ReceiptViewModel.kt$ReceiptViewModel$ </ID>
+    <ID>NoWildcardImports:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
+    <ID>SpacingAroundColon:SplitBill.kt$SplitBill$:</ID>
+    <ID>SpacingAroundParens:CamaraState.kt$(</ID>
+    <ID>TooGenericExceptionCaught:HomeViewModel.kt$HomeViewModel$e: Exception</ID>
+    <ID>WildcardImport:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
+    <ID>Wrapping:CamaraState.kt$(</ID>
+  </CurrentIssues>
+</SmellBaseline>
