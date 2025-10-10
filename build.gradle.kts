@@ -11,7 +11,7 @@ plugins {
     alias(libs.plugins.detekt) apply false
 }
 
-// Configuración global de Detekt para todos los submódulos
+// global configuration for Detekt in all submodules
 subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
@@ -20,7 +20,7 @@ subprojects {
         buildUponDefaultConfig = true
         allRules = false
         parallel = true
-        autoCorrect = false // Cambia a true si quieres auto-corrección
+        autoCorrect = false
     }
 
     dependencies {
@@ -28,7 +28,7 @@ subprojects {
     }
 }
 
-// Tarea para ejecutar Detekt en todos los módulos
+// task to execute Detekt in all modules
 tasks.register("detektAll") {
     dependsOn(subprojects.map { it.tasks.named("detekt") })
     group = "verification"
